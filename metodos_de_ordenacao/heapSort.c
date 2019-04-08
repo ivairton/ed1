@@ -2,7 +2,7 @@
  * UFMT - Ciencia da Computacao
  * ED1 - PRof Ivairton
  *
- * Implementacao de HEAP e Heap Sort
+ * Implementacao de HEAP e método de ordenação Heap Sort
  */
 
 #include<stdio.h>
