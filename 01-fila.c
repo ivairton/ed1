@@ -13,6 +13,7 @@
 //Definicao de constantes
 #define N 100
 
+
 //Definicao de registro/tipo de dado
 //Definiçao da estrutura dos dados
 struct estruturaDado {
