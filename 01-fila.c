@@ -1,143 +1,151 @@
 /**
- * UFMT - Ciência da Computacao
- * ED1 - Prof. Ivairton
+ * Universidade Federal de Mato Grosso - UFMT
+ * Campus Universitário do Araguaia
+ * Instituto de Ciências Exatas e da Terra - ICET
+ * Curso de Bacharelado em Ciência da Computação
  *
- * Implementacao de fila com prioridade, com alocacao estática.
+ * Course: 'Estrutura de Dados I'
+ * Professor: PhD Ivairton Monteiro Santos
+ *
+ * Last version: April, 10 - 2019
+ * Repository: https://github.com/ivairton/ed1
+ * Project under GPL 3.0v Licence
+ *
+ * Description: Development of priority queue data structure using static memory strategie.
  *
  */
 
-//Incluao de bibliotecas
+// Libraries
 #include<stdio.h>
 #include<stdlib.h>
 
-//Definicao de constantes
+// Constant definition
 #define N 100
 
-
-//Definicao de registro/tipo de dado
-//Definiçao da estrutura dos dados
-struct estruturaDado {
-    int dado;
+// Data structure definition
+struct dataStruct {
+    int value;
     int prio;
 };
-typedef struct estruturaDado tipoDado;
+typedef struct dataStruct dataType;
 
-//Definicao da estrutura da fila
-struct estruturaFila {
-    tipoDado fila[N];
-    int qtd;
+// Queue structure definition
+struct queueStruct {
+    dataType queue[N];
+    int quantity;
 };
-typedef struct estruturaFila tipoFila;
+typedef struct queueStruct queueType;
 
-//Prototipo de funcoes
-void inicializaFila(tipoFila*);
-void insereFila(tipoFila*, tipoDado);
-tipoDado removeFila(tipoFila*);
-tipoDado primeiroFila(tipoFila);
-int qtdFila(tipoFila);
-void imprimeFila(tipoFila);
+// Functions prototype
+void initQueue(queueType*);
+void addQueue(queueType*, dataType);
+dataType removeQueue(queueType*);
+dataType firstQueue(queueType);
+int quantityQueue(queueType);
+void printQueue(queueType);
 
-//Funcao principal
-//Funcao principal com passagem de parametros para sua execucao
+
+// MAIN FUNCTION
+// To test queue data structure
 int main(int argc, char *argv[]) {
-    tipoFila fila;
-    inicializaFila (&fila);
+    queueType queue;
+    initQueue(&queue);
 
-    tipoDado dt;
+    dataType dt;
 
-    dt.dado = 10;
+    dt.value = 10;
     dt.prio = 5;
-    insereFila(&fila, dt);
+    addQueue(&queue, dt);
 
-    dt.dado = 20;
+    dt.value = 20;
     dt.prio = 8;
-    insereFila(&fila, dt);
+    addQueue(&queue, dt);
 
-    dt.dado = 30;
+    dt.value = 30;
     dt.prio = 2;
-    insereFila(&fila, dt);
+    addQueue(&queue, dt);
 
-    dt.dado = 40;
+    dt.value = 40;
     dt.prio = 2;
-    insereFila(&fila, dt);
+    addQueue(&queue, dt);
 
-    dt = removeFila(&fila);
-    printf("Retirando valor da fila = %d(%d)\n", dt.dado, dt.prio );
-    printf("Primeiro valor da fila é = %d\n", primeiroFila(fila).dado );
-    printf("Atualmente fila tem %d valores\n", qtdFila(fila) );
-    imprimeFila(fila);
+    dt = removeQueue(&queue);
+    printf("Value removed from queue = %d(%d)\n", dt.value, dt.prio );
+    printf("First value from queue = %d\n", firstQueue(queue).value );
+    printf("Queue has %d datas\n", quantityQueue(queue) );
+    printQueue(queue);
 
     return 1;
 }
 
 
-//Funcao que inicializa a estrutura
-void inicializaFila(tipoFila* fila){
-    fila->qtd = 0;
+// Function that init queue structure
+void initQueue(queueType* q){
+    q->quantity = 0;
 }
 
-//Funcao que insere COM PRIORIDADE um novo valor da Fila
-void insereFila(tipoFila *fl, tipoDado dado) {
+// Function that add a new value in queue using priority information
+void addQueue(queueType *q, dataType dt) {
     int i;
-    //Verifica se ha espaco na Fila
-    if (fl->qtd < N) {
-        //Verifica se fila estah vazia, para este caso insere na pos zero
-        if (fl->qtd == 0) {
-            fl->fila[fl->qtd++] = dado;
+    //Check if queue is not full
+    if ( (q->quantity) < N ) {
+        //Check if queue is emptry, in this case add new value on zero position
+        if ( q->quantity == 0 ) {
+            q->queue[q->quantity++] = dt;
         } else {
-            //Insere em posicao comparando as prioridades
-            i = fl->qtd;
-            while ( (i > 0) && (fl->fila[i-1].prio > dado.prio) ) {
-                //reposiciona o dado ja presente na Fila
-                fl->fila[i] = fl->fila[i-1];
+            //Add new value in a adequate position, using priority information
+            i = q->quantity;
+            while ( (i > 0) && (q->queue[i-1].prio > dt.prio) ) {
+                //move value in queue to add new one
+                q->queue[i] = q->queue[i-1];
                 i--;
             }
-            fl->fila[i] = dado;
-            fl->qtd++;
+            q->queue[i] = dt;
+            q->quantity++;
         }
-
-
     }
 }
 
-//Remove e retorna valor da fila
-tipoDado removeFila(tipoFila* fl) {
+// Remove the first value and return than
+dataType removeQueue(queueType* q) {
     int i;
-    tipoDado vl;
+    dataType dt;
 
-    //Verifica se fila tem valor
-    if (fl->qtd > 0) {
-        vl = fl->fila[0]; //Guarda o 1o valor
-        //reposiciona os valores
-        for (i=0; i < (fl->qtd-1); i++) {
-            fl->fila[i] = fl->fila[i+1];
+    //Check if queue is not emptry
+    if ( q->quantity > 0 ) {
+        dt = q->queue[0]; //record the firts value
+        //move the orther values
+        for (i=0; i < (q->quantity-1); i++) {
+            q->queue[i] = q->queue[i+1];
         }
-        fl->qtd--; //Decrementa contador
-        return vl; //Retorna o valor guardado no inicio da funcao
+        q->quantity--; //counter decrement
+        return dt; //return the old first value, recorded at the function first time
     } else {
-        //Impressicao logica, pois a fila está vazia mas devolve o valor -1
-        vl.dado = -1;
-        vl.prio = -1;
-        return vl;
+        /*LOGICAL IMPRECISION: The queue is empty but returns -1 value. The ideal
+        return is NULL, but is necessary that function work with pointers. This
+        method is TO DO.*/
+        dt.value = -1;
+        dt.prio = -1;
+        return dt;
     }
 }
 
-// Funcao que retorna o 1o elemento da fila
-tipoDado primeiroFila(tipoFila fl) {
-    return fl.fila[0];
+// Function that return the first value from queue
+dataType firstQueue(queueType q) {
+    return q.queue[0];
 }
 
-// Retorna a quantidade de valores da fila
-int qtdFila(tipoFila fl) {
-    return fl.qtd;
+// Function that return the quantity of datas from queue
+int quantityQueue(queueType q) {
+    return q.quantity;
 }
 
-//Funcao que imprime a fila, por questoes de debug
-void imprimeFila(tipoFila fl) {
+// Function that print the queue structure. It is useful to debug structure development.
+void printQueue(queueType q) {
     int i;
-    printf("Fila: ");
-    for (i=0; i < qtdFila(fl); i++ ){
-        printf("[%d|%d]", fl.fila[i].dado, fl.fila[i].prio);
+    printf("Queue: ");
+    for (i=0; i < quantityQueue(q); i++ ){
+        printf("[%d|%d]", q.queue[i].value, q.queue[i].prio);
     }
-    printf(" (Qtd de elementos=%d)\n", qtdFila(fl) );
+    printf(" (Quantity of datas = %d)\n", quantityQueue(q) );
 }
